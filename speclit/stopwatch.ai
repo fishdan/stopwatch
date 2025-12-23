@@ -1,0 +1,36 @@
+Stopwatch Overlay App – Speclit
+
+Objective
+- Deliver a minimal cross-platform React Native stopwatch that stays on top of the screen while the phone is on, showing mm:ss:ff with start/stop toggle, clear, and close controls.
+
+Functional Requirements
+- Display format: mm:ss:ff (hundredths). Initial state 00:00:00.
+- Controls: Start/Stop toggle pauses/resumes the timer; Clear resets to zero and stops; Close hides the overlay and stops timing.
+- Overlay presence: Remains above other UI while the device is on. Android to use system overlay permission; iOS system-wide overlay is restricted—needs clarified fallback (in-app floating window vs Live Activity/Widget).
+- Accuracy: Use monotonic time deltas; avoid drift over long runs; update UI at least every 100 ms with correct hundredth rounding.
+- Lifecycle: Timer should pause when app/overlay is closed; optional resume state on reopen—clarify.
+
+UI/Interaction
+- Compact floating panel: timer text plus three buttons (Start/Stop, Clear, Close) with 44px+ touch targets.
+- Visual hierarchy: high-contrast time; minimal chrome. Allow dragging to reposition (if feasible) without interfering with taps.
+- Orientation: support portrait; clarify landscape expectations.
+
+Platform Considerations
+- Android: Requires SYSTEM_ALERT_WINDOW permission for overlays; likely needs a foreground service to stay on top when screen is on. Behavior over lock screen and Doze should be clarified.
+- iOS: No general system overlay; options are limited to in-app overlay or Live Activity/Widget. Need decision on acceptable approach.
+- Power: Avoid excessive intervals; compute elapsed time via timestamps instead of tight loops.
+
+Open Questions
+- iOS behavior: Is an in-app floating overlay acceptable, or do we need a Live Activity/Widget approximation? System-wide overlay is not allowed by iOS policies.
+- Lock screen: Should the timer be visible over the lock screen? If yes, feasibility differs by platform.
+- Persistence: Should elapsed time persist after closing/reopening the overlay?
+- Dragging: Is repositioning required or fixed position acceptable?
+
+Backlog (Speclit Tasks)
+- SK-1 Align on overlay expectations per platform (Android overlay + foreground service; iOS fallback choice).
+- SK-2 Scaffold React Native app (TypeScript), basic screen hosting overlay component, lint/test tooling.
+- SK-3 Implement timer logic using monotonic timestamps; Start/Stop/Clear actions and display formatting to hundredths.
+- SK-4 Android overlay implementation with permission request and foreground service to keep the panel on top; hook up controls to service.
+- SK-5 iOS path based on decision (in-app overlay or Live Activity); implement chosen approach and constraints.
+- SK-6 UI polish and accessibility (contrast, sizing, safe areas, drag if required).
+- SK-7 QA: device/emulator checks on both platforms; document build/run steps.
