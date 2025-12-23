@@ -1,0 +1,5 @@
+2025-12-23 Update – GitHub App bootstrap:
+- Generated JWT and installation token for GitHub App ai-codex-dan; validated /app identity and /installation/repositories access.
+- Confirmed installation permissions (write across contents, checks, workflows, secrets; no admin scopes) and repository visibility list from GitHub.
+- Created /tmp/git-askpass.sh with the current installation token (expires 2025-12-24T00:09:39Z) and configured git user to ai-codex-dan[bot] with noreply email.
+- Initialized git repository in /projects/fishdan/stopwatch; attempted to create GitHub repo fishdan/stopwatch via installation token but received 403 Resource not accessible by integration—awaiting guidance/permissions.
