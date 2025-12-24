@@ -9,3 +9,6 @@
 2025-12-23 Update – Speclit for stopwatch app:
 - Drafted speclit/stopwatch.ai outlining goals, functional requirements, UI, platform considerations, open questions, and backlog tasks (SK-1..SK-7) for the RN overlay stopwatch.
 - Captured iOS overlay constraints and need for platform decision before implementation.
+2025-12-23 Update – Clarified requirements:
+- User decisions: prioritize Android overlay; iOS can be in-app floating overlay; no lock-screen visibility; closing resets timer; drag-to-reposition desired.
+- Updated speclit/stopwatch.ai to reflect resolved questions and backlog alignment.

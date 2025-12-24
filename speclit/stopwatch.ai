@@ -16,18 +16,16 @@ UI/Interaction
 - Orientation: support portrait; clarify landscape expectations.
 
 Platform Considerations
-- Android: Requires SYSTEM_ALERT_WINDOW permission for overlays; likely needs a foreground service to stay on top when screen is on. Behavior over lock screen and Doze should be clarified.
-- iOS: No general system overlay; options are limited to in-app overlay or Live Activity/Widget. Need decision on acceptable approach.
+- Android: Requires SYSTEM_ALERT_WINDOW permission for overlays; likely needs a foreground service to stay on top when screen is on. Do not show over lock screen; close resets timer state.
+- iOS: No general system overlay; acceptable fallback is in-app floating overlay (no lock-screen visibility). Live Activity/Widget not required unless easily available.
 - Power: Avoid excessive intervals; compute elapsed time via timestamps instead of tight loops.
 
 Open Questions
-- iOS behavior: Is an in-app floating overlay acceptable, or do we need a Live Activity/Widget approximation? System-wide overlay is not allowed by iOS policies.
-- Lock screen: Should the timer be visible over the lock screen? If yes, feasibility differs by platform.
-- Persistence: Should elapsed time persist after closing/reopening the overlay?
-- Dragging: Is repositioning required or fixed position acceptable?
+- Persistence: Closing should reset the timer; no persistence required.
+- Dragging: Repositioning desired; implement drag affordance where platform allows.
 
 Backlog (Speclit Tasks)
-- SK-1 Align on overlay expectations per platform (Android overlay + foreground service; iOS fallback choice).
+- SK-1 Align on overlay expectations per platform (Android overlay + foreground service; iOS in-app overlay fallback; no lock-screen visibility; closing resets timer; drag-to-reposition planned).
 - SK-2 Scaffold React Native app (TypeScript), basic screen hosting overlay component, lint/test tooling.
 - SK-3 Implement timer logic using monotonic timestamps; Start/Stop/Clear actions and display formatting to hundredths.
 - SK-4 Android overlay implementation with permission request and foreground service to keep the panel on top; hook up controls to service.
