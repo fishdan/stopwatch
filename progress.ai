@@ -16,3 +16,6 @@
 - Created React Native project StopwatchApp (v0.73.6, TypeScript) with initial overlay stopwatch UI and controls (start/stop toggle, clear, close) and drag-to-reposition inside app; format mm:ss:ff using monotonic timestamps.
 - Added Android manifest permissions for SYSTEM_ALERT_WINDOW and FOREGROUND_SERVICE to prep overlay service work.
 - Close action resets timer and hides overlay; reopen affordance provided inside app.
+2025-12-23 Update – Overlay permission scaffolding:
+- Fixed overlay drag bounds and sizing constants; added Android overlay permission banner/button in UI.
+- Implemented native module (OverlayPermissionModule/Package) to check/request SYSTEM_ALERT_WINDOW via settings; registered package in MainApplication.

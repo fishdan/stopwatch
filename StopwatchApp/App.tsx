@@ -1,7 +1,10 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
+  Alert,
   Dimensions,
+  NativeModules,
   PanResponder,
+  Platform,
   Pressable,
   StatusBar,
   StyleSheet,
@@ -11,6 +14,16 @@ import {
 
 const TICK_MS = 50;
 const BUTTON_SIZE = 48;
+const OVERLAY_WIDTH = 260;
+const OVERLAY_HEIGHT = 120;
+
+type OverlayPermissionModule = {
+  isGranted: () => Promise<boolean>;
+  requestPermission: () => Promise<boolean>;
+};
+
+const OverlayPermission = NativeModules
+  .OverlayPermission as OverlayPermissionModule | undefined;
 
 const now = () =>
   typeof performance !== 'undefined' && performance.now
@@ -35,6 +48,10 @@ const StopwatchOverlay = () => {
   const [elapsedMs, setElapsedMs] = useState(0);
   const [visible, setVisible] = useState(true);
   const [position, setPosition] = useState({x: 24, y: 120});
+  // Track whether Android overlay permission has been granted; default true on iOS.
+  const [overlayAllowed, setOverlayAllowed] = useState(
+    Platform.OS !== 'android',
+  );
   const dragOffset = useRef({dx: 0, dy: 0});
   const window = Dimensions.get('window');
 
@@ -48,6 +65,23 @@ const StopwatchOverlay = () => {
     }, TICK_MS);
     return () => clearInterval(interval);
   }, [running, elapsedMs]);
+
+  useEffect(() => {
+    const checkPermission = async () => {
+      if (Platform.OS !== 'android') {
+        return;
+      }
+      try {
+        const granted = await OverlayPermission?.isGranted?.();
+        if (typeof granted === 'boolean') {
+          setOverlayAllowed(granted);
+        }
+      } catch (err) {
+        console.warn('Overlay permission check failed', err);
+      }
+    };
+    checkPermission();
+  }, []);
 
   const panResponder = useMemo(
     () =>
@@ -65,12 +99,12 @@ const StopwatchOverlay = () => {
             const nextX = clamp(
               gesture.moveX - dragOffset.current.dx,
               0,
-              window.width - styles.overlay.width,
+              window.width - OVERLAY_WIDTH,
             );
             const nextY = clamp(
               gesture.moveY - dragOffset.current.dy,
               0,
-              window.height - styles.overlay.minHeight,
+              window.height - OVERLAY_HEIGHT,
             );
             return {x: nextX, y: nextY};
           });
@@ -90,6 +124,33 @@ const StopwatchOverlay = () => {
     setRunning(false);
     setElapsedMs(0);
     setVisible(false);
+  };
+
+  const handleRequestOverlay = async () => {
+    if (Platform.OS !== 'android') {
+      return;
+    }
+    try {
+      const granted = await OverlayPermission?.requestPermission?.();
+      if (granted) {
+        setOverlayAllowed(true);
+        return;
+      }
+      const recheck = await OverlayPermission?.isGranted?.();
+      setOverlayAllowed(!!recheck);
+      if (!recheck) {
+        Alert.alert(
+          'Overlay permission needed',
+          'Enable “Display over other apps” for StopwatchApp to keep the timer on top.',
+        );
+      }
+    } catch (err) {
+      console.warn('Overlay permission request failed', err);
+      Alert.alert(
+        'Overlay permission',
+        'Unable to request overlay permission. Please enable it manually in system settings.',
+      );
+    }
   };
 
   if (!visible) {
@@ -112,6 +173,13 @@ const StopwatchOverlay = () => {
         },
       ]}
       {...panResponder.panHandlers}>
+      {Platform.OS === 'android' && !overlayAllowed ? (
+        <Pressable
+          style={styles.permissionBadge}
+          onPress={handleRequestOverlay}>
+          <Text style={styles.permissionText}>Enable overlay permission</Text>
+        </Pressable>
+      ) : null}
       <Text style={styles.timer} selectable={false}>
         {formatTime(elapsedMs)}
       </Text>
@@ -152,8 +220,8 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    width: 260,
-    minHeight: 120,
+    width: OVERLAY_WIDTH,
+    minHeight: OVERLAY_HEIGHT,
     padding: 12,
     borderRadius: 16,
     backgroundColor: 'rgba(20, 24, 32, 0.9)',
@@ -175,6 +243,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     gap: 8,
+  },
+  permissionBadge: {
+    marginBottom: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: '#5c3b00',
+  },
+  permissionText: {
+    color: '#ffdca8',
+    fontSize: 13,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   button: {
     flex: 1,
