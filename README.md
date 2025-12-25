@@ -15,9 +15,9 @@ A completey free polished, minimal React Native stopwatch app for Android that s
 
 ## Installation
 
-You can download the latest standalone APK from the [Releases](https://github.com/fishdan/stopwatch/releases) page.
+You can download the latest standalone APK (v1.0.1) from the [Releases](https://github.com/fishdan/stopwatch/releases) page.
 
-1. Download the `app-release.apk`.
+1. Download the `stopwatch-v1.0.1.apk`.
 2. Open the file on your Android device.
 3. If prompted, allow "Install from unknown sources".
 4. Open the app and tap **"Open System Overlay"**.

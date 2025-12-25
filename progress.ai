@@ -48,3 +48,8 @@
 2025-12-25 Update – Auto-Launch Implementation:
 - Modified App.tsx to automatically launch the system overlay if permissions are already granted.
 - Updated the release APK (v1.0.0) on GitHub with the latest build.
+2025-12-25 Update – Versioning Policy & v1.0.1 Release:
+- Adopted semantic versioning and incremented to v1.0.1.
+- Aligned version strings in package.json (1.0.1) and Android build.gradle (versionCode 2, versionName "1.0.1").
+- Fixed package name to lowercase (stopwatch-app) per npm/lint standards.
+- Published official v1.0.1 release on GitHub with updated auto-launch feature.
