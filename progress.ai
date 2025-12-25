@@ -45,3 +45,6 @@
 - Implemented "Dark Glass" UI theme for both Native Overlay and React Native App (SK-6).
 - Created custom vector assets for Play, Pause, Stop, Close.
 - Generated standalone signed APK for sharing: android/app/build/outputs/apk/release/app-release.apk.
+2025-12-25 Update – Auto-Launch Implementation:
+- Modified App.tsx to automatically launch the system overlay if permissions are already granted.
+- Updated the release APK (v1.0.0) on GitHub with the latest build.

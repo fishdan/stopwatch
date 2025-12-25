@@ -22,25 +22,17 @@ def get_installation_token():
     return response.json()['token']
 
 token = get_installation_token()
-run_command = lambda cmd: subprocess.run(cmd, shell=True, capture_output=True, text=True)
-
-# Update git with askpass
-askpass_path = "/tmp/git-askpass-auto.sh"
+askpass_path = "/tmp/git-askpass-final.sh"
 with open(askpass_path, "w") as f: f.write(f'#!/bin/sh\necho "{token}"\n')
 os.chmod(askpass_path, 0o700)
 os.environ["GIT_ASKPASS"] = askpass_path
 
-subprocess.run("git add . && git commit -m \"Add auto-launch logic for system overlay\" && git push origin master", shell=True)
+# Commit everything first
+subprocess.run("git add .", shell=True)
+subprocess.run('git commit -m "Auto-launch and final progress updates"', shell=True)
 
-# Update Release Asset (Delete and re-upload is easiest via API)
-headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
-release = requests.get("https://api.github.com/repos/fishdan/stopwatch/releases/tags/v1.0.0", headers=headers).json()
-for asset in release['assets']:
-    if asset['name'] == 'stopwatch-v1.0.0.apk':
-        requests.delete(asset['url'], headers=headers)
-
-upload_url = release['upload_url'].split('{')[0]
-with open("StopwatchApp/android/app/build/outputs/apk/release/app-release.apk", 'rb') as f:
-    requests.post(upload_url, headers={'Authorization': f'token {token}', 'Content-Type': 'application/vnd.android.package-archive'}, params={'name': 'stopwatch-v1.0.0.apk'}, data=f.read())
-
-print("Update complete.")
+# Pull with rebase
+subprocess.run("git pull --rebase origin master", shell=True)
+# Push
+subprocess.run("git push origin master", shell=True)
+print("Final git sync complete.")
