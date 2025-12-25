@@ -201,6 +201,26 @@ const StopwatchOverlay = () => {
 };
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    const autoLaunch = async () => {
+      if (Platform.OS !== 'android') {
+        return;
+      }
+      try {
+        const isGranted = await OverlayPermission?.isGranted?.();
+        if (isGranted) {
+          const StopwatchModule = NativeModules.StopwatchModule;
+          if (StopwatchModule) {
+            StopwatchModule.start();
+          }
+        }
+      } catch (e) {
+        console.warn('Auto-launch check failed', e);
+      }
+    };
+    autoLaunch();
+  }, []);
+
   return (
     <View style={styles.app}>
       <StatusBar
