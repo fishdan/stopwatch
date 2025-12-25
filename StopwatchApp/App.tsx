@@ -185,15 +185,15 @@ const StopwatchOverlay = () => {
       </Text>
       <View style={styles.controls}>
         <Pressable style={styles.button} onPress={handleStartStop}>
-          <Text style={styles.buttonText}>{running ? 'Stop' : 'Start'}</Text>
+          <Text style={styles.iconText}>{running ? '⏸' : '▶'}</Text>
         </Pressable>
         <Pressable style={styles.button} onPress={handleClear}>
-          <Text style={styles.buttonText}>Clear</Text>
+          <Text style={styles.iconText}>⏹</Text>
         </Pressable>
         <Pressable
           style={[styles.button, styles.closeButton]}
           onPress={handleClose}>
-          <Text style={styles.buttonText}>Close</Text>
+          <Text style={styles.iconText}>✕</Text>
         </Pressable>
       </View>
     </View>
@@ -208,7 +208,41 @@ function App(): React.JSX.Element {
         backgroundColor="transparent"
         barStyle="light-content"
       />
+      {/* Kept existing overlay for iOS or fallback, added system overlay trigger */}
       <StopwatchOverlay />
+      
+      <View style={{position: 'absolute', bottom: 40, alignSelf: 'center'}}>
+           <Pressable 
+              style={[styles.reopenButton, {backgroundColor: '#2d3b4f'}]} 
+              onPress={async () => {
+                  try {
+                      // Check permission first
+                      const isGranted = await OverlayPermission?.isGranted?.();
+                      if (!isGranted) {
+                          Alert.alert(
+                              "Permission Required", 
+                              "Please grant 'Display over other apps' permission to use the System Overlay.",
+                              [
+                                  { text: "Cancel", style: "cancel" },
+                                  { text: "Open Settings", onPress: () => OverlayPermission?.requestPermission?.() }
+                              ]
+                          );
+                          return;
+                      }
+                      
+                      const StopwatchModule = NativeModules.StopwatchModule;
+                      if (StopwatchModule) {
+                          StopwatchModule.start();
+                      } else {
+                          Alert.alert("Error", "StopwatchModule not found");
+                      }
+                  } catch (e) {
+                      Alert.alert("Error checking permission", String(e));
+                  }
+              }}>
+              <Text style={styles.reopenText}>Open System Overlay</Text>
+           </Pressable>
+      </View>
     </View>
   );
 }
@@ -222,27 +256,33 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: OVERLAY_WIDTH,
     minHeight: OVERLAY_HEIGHT,
-    padding: 12,
+    padding: 16,
     borderRadius: 16,
-    backgroundColor: 'rgba(20, 24, 32, 0.9)',
+    backgroundColor: 'rgba(18, 18, 18, 0.85)', // Dark Glass
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 4},
     shadowOpacity: 0.35,
     shadowRadius: 8,
-    elevation: 10,
+    elevation: 0, 
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   timer: {
-    fontSize: 42,
-    color: '#e6f0ff',
+    fontSize: 38,
+    color: '#ffffff',
     fontWeight: '700',
     fontVariant: ['tabular-nums'],
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 2,
   },
   controls: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 8,
+    gap: 12,
   },
   permissionBadge: {
     marginBottom: 8,
@@ -260,18 +300,18 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
     height: BUTTON_SIZE,
-    borderRadius: 12,
-    backgroundColor: '#1f2a3a',
+    borderRadius: 24, // Iconic circle/pill
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   closeButton: {
-    backgroundColor: '#3a1f1f',
+    backgroundColor: 'rgba(255, 82, 82, 0.2)',
   },
-  buttonText: {
-    color: '#e6f0ff',
-    fontSize: 16,
-    fontWeight: '600',
+  iconText: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   reopenContainer: {
     flex: 1,

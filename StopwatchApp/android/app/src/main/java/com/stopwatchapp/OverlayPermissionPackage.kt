@@ -7,7 +7,10 @@ import com.facebook.react.uimanager.ViewManager
 
 class OverlayPermissionPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> =
-      listOf(OverlayPermissionModule(reactContext))
+      listOf(
+          OverlayPermissionModule(reactContext),
+          StopwatchModule(reactContext)
+      )
 
   override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> =
       emptyList()

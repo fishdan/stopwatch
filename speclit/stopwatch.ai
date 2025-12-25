@@ -28,7 +28,8 @@ Backlog (Speclit Tasks)
 - SK-1 Align on overlay expectations per platform (Android overlay + foreground service; iOS in-app overlay fallback; no lock-screen visibility; closing resets timer; drag-to-reposition planned).
 - SK-2 Scaffold React Native app (TypeScript), basic screen hosting overlay component, lint/test tooling.
 - SK-3 Implement timer logic using monotonic timestamps; Start/Stop/Clear actions and display formatting to hundredths.
-- SK-4 Android overlay implementation with permission request and foreground service to keep the panel on top; hook up controls to service.
-- SK-5 iOS path based on decision (in-app overlay or Live Activity); implement chosen approach and constraints.
+- [DONE] SK-4 Android overlay implementation with permission request and foreground service to keep the panel on top; hook up controls to service.
+- [SKIPPED] SK-5 iOS path based on decision (in-app overlay or Live Activity); implement chosen approach and constraints.
 - SK-6 UI polish and accessibility (contrast, sizing, safe areas, drag if required).
 - SK-7 QA: device/emulator checks on both platforms; document build/run steps.
+- [DONE] SK-8 Prepare for Google Play Store Deployment (Signed AAB, Assets, Signing Config).

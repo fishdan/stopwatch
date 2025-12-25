@@ -19,3 +19,29 @@
 2025-12-23 Update – Overlay permission scaffolding:
 - Fixed overlay drag bounds and sizing constants; added Android overlay permission banner/button in UI.
 - Implemented native module (OverlayPermissionModule/Package) to check/request SYSTEM_ALERT_WINDOW via settings; registered package in MainApplication.
+2025-12-25 Update – Authentication and Planning:
+- Bootstrapped GitHub App authentication successfully; validated credentials and configured git user as ai-codex-dan[bot].
+- Verified codebase state: Timer logic and permissions scaffolding are present.
+- Next Work: Transitioning StopwatchOverlay from an in-app view to a true Android system overlay via Foreground Service (SK-4).
+2025-12-25 Update – Android System Overlay (SK-4):
+- Implement StopwatchService.kt: Native Android Foreground Service to host the overlay view independent of RN activity.
+- Implement StopwatchModule.kt: JSI Bridge to start/stop the service from React Native.
+- Updated AndroidManifest: Registered service with foregroundServiceType="specialUse".
+- Updated App.tsx: Added "Open System Overlay" button to trigger the native service.
+- Verification Needed: Run on Android Device, grant "Display over other apps", and test persistence when app is backgrounded.
+2025-12-25 Update – Android Overlay Verified:
+- Successfully verified Android System Overlay on physical device (Android 16).
+- Fixed crash issues by adding 'specialUse' foreground service type and matching permission in AndroidManifest.
+- Added permission check in App.tsx to prompt user if 'Display over other apps' is missing.
+- Verified timer counts and drag persistence works in background.
+- SK-4 is COMPLETE.
+2025-12-25 Update – Android Release Build Ready (SK-8):
+- Generated release keystore (android/app/release.keystore).
+- Configured secure signing in build.gradle using android/key.properties.
+- Enabled ProGuard/Minification for release builds.
+- Successfully built signed Android App Bundle (.aab).
+- SK-8 is COMPLETE.
+2025-12-25 Update – UI Polish & Shareable APK:
+- Implemented "Dark Glass" UI theme for both Native Overlay and React Native App (SK-6).
+- Created custom vector assets for Play, Pause, Stop, Close.
+- Generated standalone signed APK for sharing: android/app/build/outputs/apk/release/app-release.apk.
