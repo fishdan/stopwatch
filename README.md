@@ -1,6 +1,6 @@
-# AntiGravity Stopwatch Overlay
+# Stopwatch Overlay
 
-A polished, minimal React Native stopwatch app for Android that stays on top of your screen even when you switch apps.
+A completey free polished, minimal React Native stopwatch app for Android that stays on top of your screen even when you switch apps.
 
 ![Stopwatch Demo](https://via.placeholder.com/800x450.png?text=Stopwatch+Overlay+Demo)
 
