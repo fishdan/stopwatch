@@ -201,67 +201,79 @@ const StopwatchOverlay = () => {
 };
 
 function App(): React.JSX.Element {
+  const [overlayAllowed, setOverlayAllowed] = useState<boolean | null>(null);
+
   useEffect(() => {
-    const autoLaunch = async () => {
+    const checkAndLaunch = async () => {
       if (Platform.OS !== 'android') {
         return;
       }
       try {
         const isGranted = await OverlayPermission?.isGranted?.();
+        setOverlayAllowed(!!isGranted);
+
         if (isGranted) {
           const StopwatchModule = NativeModules.StopwatchModule;
           if (StopwatchModule) {
             StopwatchModule.start();
+            // Give a tiny bit of time for the service to start before minimizing
+            setTimeout(() => {
+              StopwatchModule.minimize();
+            }, 100);
           }
         }
       } catch (e) {
         console.warn('Auto-launch check failed', e);
       }
     };
-    autoLaunch();
+    checkAndLaunch();
   }, []);
+
+  const handleRequestOverlay = async () => {
+    try {
+      const granted = await OverlayPermission?.requestPermission?.();
+      if (granted) {
+        setOverlayAllowed(true);
+        NativeModules.StopwatchModule?.start();
+        setTimeout(() => {
+          NativeModules.StopwatchModule?.minimize();
+        }, 100);
+      }
+    } catch (err) {
+      Alert.alert('Error', 'Unable to request overlay permission.');
+    }
+  };
+
+  if (overlayAllowed === null) {
+    return <View style={styles.app} />;
+  }
+
+  if (overlayAllowed === false) {
+    return (
+      <View style={styles.app}>
+        <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+        <View style={styles.reopenContainer}>
+          <Text style={[styles.reopenText, { marginBottom: 20, textAlign: 'center' }]}>
+            Stopwatch operates as a system overlay.
+          </Text>
+          <Pressable style={styles.reopenButton} onPress={handleRequestOverlay}>
+            <Text style={styles.reopenText}>Enable Overlay & Start</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.app}>
-      <StatusBar
-        translucent
-        backgroundColor="transparent"
-        barStyle="light-content"
-      />
-      {/* Kept existing overlay for iOS or fallback, added system overlay trigger */}
-      <StopwatchOverlay />
-      
-      <View style={{position: 'absolute', bottom: 40, alignSelf: 'center'}}>
-           <Pressable 
-              style={[styles.reopenButton, {backgroundColor: '#2d3b4f'}]} 
-              onPress={async () => {
-                  try {
-                      // Check permission first
-                      const isGranted = await OverlayPermission?.isGranted?.();
-                      if (!isGranted) {
-                          Alert.alert(
-                              "Permission Required", 
-                              "Please grant 'Display over other apps' permission to use the System Overlay.",
-                              [
-                                  { text: "Cancel", style: "cancel" },
-                                  { text: "Open Settings", onPress: () => OverlayPermission?.requestPermission?.() }
-                              ]
-                          );
-                          return;
-                      }
-                      
-                      const StopwatchModule = NativeModules.StopwatchModule;
-                      if (StopwatchModule) {
-                          StopwatchModule.start();
-                      } else {
-                          Alert.alert("Error", "StopwatchModule not found");
-                      }
-                  } catch (e) {
-                      Alert.alert("Error checking permission", String(e));
-                  }
-              }}>
-              <Text style={styles.reopenText}>Open System Overlay</Text>
-           </Pressable>
+      <StatusBar translucent backgroundColor="transparent" barStyle="light-content" />
+      <View style={styles.reopenContainer}>
+        <Text style={styles.reopenText}>Stopwatch is running in overlay mode</Text>
+        <Pressable 
+          style={[styles.reopenButton, { marginTop: 20 }]} 
+          onPress={() => NativeModules.StopwatchModule?.minimize()}>
+          <Text style={styles.reopenText}>Minimize App</Text>
+        </Pressable>
       </View>
     </View>
   );

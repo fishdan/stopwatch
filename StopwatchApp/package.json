@@ -1,5 +1,5 @@
 {
-  "name": "stopwatch-app",
+  "name": "cf-stopwatch",
   "version": "1.0.1",
   "private": true,
   "scripts": {

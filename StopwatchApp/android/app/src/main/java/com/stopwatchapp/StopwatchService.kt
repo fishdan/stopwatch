@@ -70,6 +70,16 @@ class StopwatchService : Service() {
             gravity = Gravity.CENTER
         }
 
+        // App Name Label
+        val appNameLabel = TextView(this).apply {
+            text = "CF Stopwatch"
+            textSize = 12f
+            setTextColor(Color.parseColor("#AAAAAA"))
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, 8)
+        }
+        overlayView.addView(appNameLabel)
+
         // Timer Text
         timerText = TextView(this).apply {
             text = "00:00:00"

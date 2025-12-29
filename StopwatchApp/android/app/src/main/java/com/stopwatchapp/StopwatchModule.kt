@@ -27,4 +27,9 @@ class StopwatchModule(reactContext: ReactApplicationContext) : ReactContextBaseJ
         val intent = Intent(reactApplicationContext, StopwatchService::class.java)
         reactApplicationContext.stopService(intent)
     }
+
+    @ReactMethod
+    fun minimize() {
+        currentActivity?.moveTaskToBack(true)
+    }
 }
