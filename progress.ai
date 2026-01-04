@@ -82,3 +82,9 @@
 - **Infrastructure**: Updated to target API 35 (Android 15) to satisfy new Play Store requirements.
 - **Optimization**: Added ProGuard rules to protect native modules from being stripped during minification.
 - **Release**: Successfully deployed v1.1.4 (versionCode 7) to Internal Testing.
+
+2026-01-04 Update – Seamless Silent Launch (v1.1.9):
+- **Optimization**: Implemented a "Trampoline" `LauncherActivity` with `Theme.NoDisplay`.
+- **Experience**: Tapping the app icon now instantly starts the overlay service without showing any app window or animation (if permissions are granted).
+- **Fallback**: If permissions are missing, the trampoline correctly routes the user to the `MainActivity` UI for setup.
+- **Fix**: Resolved the "popup and hide" visual flicker found in v1.1.8.
