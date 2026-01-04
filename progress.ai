@@ -58,3 +58,9 @@
 - Updated Android resource strings, package name, and system overlay UI (completed in previous session).
 - Updated iOS Info.plist (CFBundleDisplayName), LaunchScreen.storyboard (UI label), and project.pbxproj (PRODUCT_NAME).
 - Aligned app.json and package.json with the new branding.
+
+2026-01-04 Update – Deploy Android Project (SK-DA):
+- Created DEPLOYMENT.md, DEPLOYMENT-CHECKLIST.md, and TESTING-PLAN.md for standardized releases.
+- Implemented StopwatchApp/scripts/build-release.sh to automate signed AAB generation.
+- Staged cf-stopwatch-v1.1.0.aab in releases/ folder.
+- Configured GitHub Actions CI/CD (.github/workflows/android-build.yml) for automated builds on version tags.

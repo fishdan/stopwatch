@@ -1,0 +1,60 @@
+Deploy Android – Speclit
+
+Objective
+- Establish a reliable, repeatable process for deploying the CF Stopwatch Android app to the Google Play Store, including building signed release artifacts, managing versioning, and publishing updates.
+
+Functional Requirements
+- Build signed release AAB (Android App Bundle) for Google Play Store distribution.
+- Manage version codes and version names consistently across releases.
+- Store signing keys securely and configure signing in Gradle.
+- Generate release notes and changelog for each version.
+- Upload AAB to Google Play Console (internal testing, then production).
+- Verify app functionality on test devices before production release.
+- Track deployment history and version releases in progress.ai.
+
+Build & Signing
+- Use Gradle to build release AAB with proper signing configuration.
+- Store keystore file securely (not in version control).
+- Configure signing in `android/app/build.gradle` using keystore properties.
+- Ensure ProGuard/R8 is configured for code optimization and obfuscation.
+- Validate AAB structure and signing before upload.
+
+Versioning
+- Follow semantic versioning for versionName (e.g., 1.1.0, 1.2.0).
+- Increment versionCode for each release (monotonically increasing integer).
+- Update version in `android/app/build.gradle` before each build.
+- Tag releases in git with version number (e.g., v1.1.0).
+- Document version changes in progress.ai and release notes.
+
+Google Play Console
+- Upload signed AAB to Google Play Console.
+- Start with internal testing track for validation.
+- Promote to production after successful testing.
+- Fill in release notes describing changes and improvements.
+- Monitor crash reports and user feedback after release.
+
+Testing & Validation
+- Test release build on physical devices before uploading.
+- Verify overlay functionality, permissions, and UI on different Android versions.
+- Check app size and performance metrics.
+- Ensure no debug code or logging in release build.
+
+Documentation
+- Document build process and signing setup in README or deployment guide.
+- Maintain changelog of all releases.
+- Record deployment steps and any issues encountered in progress.ai.
+
+Open Questions
+- Automate version bumping or keep manual?
+- Set up CI/CD for automated builds and deployments?
+- Use fastlane or other deployment automation tools?
+
+Backlog (Speclit Tasks)
+- [DONE] SK-DA-1 Set up keystore and configure signing in Gradle for release builds.
+- [DONE] SK-DA-2 Create build script or document manual steps for generating signed AAB.
+- [DONE] SK-DA-3 Establish versioning convention and update process (versionCode and versionName).
+- [DONE] SK-DA-4 Create deployment checklist and document upload process to Google Play Console.
+- [DONE] SK-DA-5 Set up internal testing track and define testing criteria before production.
+- [DONE] SK-DA-6 Create release notes template and changelog maintenance process.
+- [DONE] SK-DA-7 Document complete deployment workflow in README or separate deployment guide.
+- [DONE] SK-DA-8 (Optional) Investigate CI/CD automation for build and deployment process.

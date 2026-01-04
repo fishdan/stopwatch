@@ -1,4 +1,4 @@
-Read repo.ai and act on those instructions.  When done return here to execute the rest of this file
+Read .repo_ai and act on those instructions.  When done return here to execute the rest of this file
 Review progress.ai, the speckit files and consider what branch we are on and tell me what we should be working on next.
 Continuously update progress.ai as if you were a secretary recording all the decisions we implement.
 Make sure we always honor our speckit constitution.
