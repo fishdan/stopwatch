@@ -21,6 +21,16 @@ jobs:
           distribution: 'zulu'
           cache: gradle
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: StopwatchApp/package-lock.json
+
+      - name: Install dependencies
+        run: cd StopwatchApp && npm install
+
       - name: Grant execute permission for gradlew
         run: chmod +x StopwatchApp/android/gradlew
 
