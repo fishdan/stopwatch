@@ -64,3 +64,14 @@
 - Implemented StopwatchApp/scripts/build-release.sh to automate signed AAB generation.
 - Staged cf-stopwatch-v1.1.0.aab in releases/ folder.
 - Configured GitHub Actions CI/CD (.github/workflows/android-build.yml) for automated builds on version tags.
+
+2026-01-04 Update – Submodule Migration:
+- Replaced standalone `repo.ai` with `.repo_ai` git submodule for shared infrastructure.
+- Updated `start.ai` entrypoint to reference the new submodule location.
+
+2026-01-04 Update – Play Store Conflict Resolution & Release:
+- Key Decision: Renamed package from `com.stopwatchapp` to `com.fishdan.cfstopwatch` to resolve Google Play Store naming conflicts.
+- Refactored native Kotlin source directory structure and updated all package/import statements.
+- Bumped version to `1.1.1` (versionCode 4).
+- Successfully pushed all changes to GitHub using the App Bot identity.
+- Created official GitHub Release `v1.1.1` and uploaded the signed AAB artifact.
