@@ -8,3 +8,16 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific keep options here:
+
+# Keep our native modules
+-keep class com.fishdan.cfstopwatch.** { *; }
+
+# Keep React Native classes
+-keep class com.facebook.react.bridge.ReactContextBaseJavaModule { *; }
+-keep class com.facebook.react.bridge.ReactMethod { *; }
+-keep class com.facebook.react.bridge.Promise { *; }
+-keep class com.facebook.react.bridge.ReactApplicationContext { *; }
+
+# Keep Flipper out of release builds
+-dontwarn com.facebook.flipper.**
+-dontwarn com.facebook.react.flipper.**
