@@ -79,8 +79,8 @@ android {
         applicationId "com.fishdan.cfstopwatch"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "1.1.5"
+        versionCode 9
+        versionName "1.1.6"
     }
     signingConfigs {
         debug {
