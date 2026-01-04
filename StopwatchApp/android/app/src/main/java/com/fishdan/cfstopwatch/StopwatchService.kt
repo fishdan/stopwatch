@@ -142,6 +142,8 @@ class StopwatchService : Service() {
         // Close Button
         val closeButton = createIconButton(R.drawable.ic_close) {
             stopSelf()
+            // Ensure the main activity/process is also cleared so next launch is fresh
+            android.os.Process.killProcess(android.os.Process.myPid())
         }
         buttonsLayout.addView(closeButton)
 

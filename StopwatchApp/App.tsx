@@ -1,6 +1,7 @@
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
+  AppState,
   Dimensions,
   NativeModules,
   PanResponder,
@@ -203,30 +204,43 @@ const StopwatchOverlay = () => {
 function App(): React.JSX.Element {
   const [overlayAllowed, setOverlayAllowed] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const checkAndLaunch = async () => {
-      if (Platform.OS !== 'android') {
-        return;
-      }
-      try {
-        const isGranted = await OverlayPermission?.isGranted?.();
-        setOverlayAllowed(!!isGranted);
+  const checkAndLaunch = async () => {
+    if (Platform.OS !== 'android') {
+      return;
+    }
+    try {
+      const isGranted = await OverlayPermission?.isGranted?.();
+      setOverlayAllowed(!!isGranted);
 
-        if (isGranted) {
-          const StopwatchModule = NativeModules.StopwatchModule;
-          if (StopwatchModule) {
-            StopwatchModule.start();
-            // Give a tiny bit of time for the service to start before minimizing
-            setTimeout(() => {
-              StopwatchModule.minimize();
-            }, 100);
-          }
+      if (isGranted) {
+        const StopwatchModule = NativeModules.StopwatchModule;
+        if (StopwatchModule) {
+          StopwatchModule.start();
+          // Give a bit of time for the service to start before minimizing
+          setTimeout(() => {
+            StopwatchModule.minimize();
+          }, 300);
         }
-      } catch (e) {
-        console.warn('Auto-launch check failed', e);
       }
-    };
+    } catch (e) {
+      console.warn('Auto-launch check failed', e);
+    }
+  };
+
+  useEffect(() => {
+    // Initial check on mount
     checkAndLaunch();
+
+    // Re-check and auto-minimize every time the app comes to the foreground
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState === 'active') {
+        checkAndLaunch();
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
   }, []);
 
   const handleRequestOverlay = async () => {
