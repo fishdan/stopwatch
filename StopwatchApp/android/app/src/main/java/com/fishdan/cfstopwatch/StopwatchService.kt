@@ -48,7 +48,6 @@ class StopwatchService : Service() {
         super.onCreate()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         createNotificationChannel()
-        createNotificationChannel()
         if (Build.VERSION.SDK_INT >= 34) {
             startForeground(
                 1, 
@@ -242,9 +241,11 @@ class StopwatchService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
                 "STOPWATCH_CHANNEL_ID",
-                "Stopwatch Service Channel",
-                NotificationManager.IMPORTANCE_LOW
-            )
+                "CF Stopwatch Notification",
+                NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                description = "Shows that the floating stopwatch is active"
+            }
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(serviceChannel)
         }
@@ -252,9 +253,11 @@ class StopwatchService : Service() {
 
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, "STOPWATCH_CHANNEL_ID")
-            .setContentTitle("Stopwatch Overlay")
-            .setContentText("Stopwatch is running over other apps")
-            .setSmallIcon(android.R.drawable.ic_dialog_info) // Fallback icon
+            .setContentTitle("CF Stopwatch Active")
+            .setContentText("Tap to go back to the app settings.")
+            .setSmallIcon(R.mipmap.ic_launcher)
+            .setOngoing(true)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
 }
