@@ -73,5 +73,12 @@
 - Key Decision: Renamed package from `com.stopwatchapp` to `com.fishdan.cfstopwatch` to resolve Google Play Store naming conflicts.
 - Refactored native Kotlin source directory structure and updated all package/import statements.
 - Bumped version to `1.1.1` (versionCode 4).
-- Successfully pushed all changes to GitHub using the App Bot identity.
 - Created official GitHub Release `v1.1.1` and uploaded the signed AAB artifact.
+
+2026-01-04 Update – Android 15 & Crash Fix (v1.1.4):
+- **Issue**: App was crashing immediately on launch with "keeps stopping."
+- **Root Cause**: Flipper (debug tool) was being initialized in release builds where its libraries are stripped, causing a ClassNotFoundException.
+- **Fix**: Wrapped Flipper initialization in `BuildConfig.DEBUG` in `MainApplication.kt`.
+- **Infrastructure**: Updated to target API 35 (Android 15) to satisfy new Play Store requirements.
+- **Optimization**: Added ProGuard rules to protect native modules from being stripped during minification.
+- **Release**: Successfully deployed v1.1.4 (versionCode 7) to Internal Testing.
