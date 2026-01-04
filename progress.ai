@@ -53,3 +53,8 @@
 - Aligned version strings in package.json (1.0.1) and Android build.gradle (versionCode 2, versionName "1.0.1").
 - Fixed package name to lowercase (stopwatch-app) per npm/lint standards.
 - Published official v1.0.1 release on GitHub with updated auto-launch feature.
+2026-01-04 Update – App Renaming (SK-7/Refactor):
+- Completed renaming of the application to "CF Stopwatch" across all platforms.
+- Updated Android resource strings, package name, and system overlay UI (completed in previous session).
+- Updated iOS Info.plist (CFBundleDisplayName), LaunchScreen.storyboard (UI label), and project.pbxproj (PRODUCT_NAME).
+- Aligned app.json and package.json with the new branding.
